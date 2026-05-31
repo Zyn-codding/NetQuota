@@ -2,9 +2,9 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>NetQuota — Free Quota</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>NetQuota — Unlimited Freedom</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -16,220 +16,308 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            background: #000000;
             color: #fff;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
             overflow: hidden;
+            position: relative;
         }
 
-        .container {
-            max-width: 550px;
+        /* SWAG Animated Gradient Background */
+        body::before {
+            content: '';
+            position: absolute;
             width: 100%;
-            background: rgba(20, 20, 40, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 48px;
-            padding: 32px 28px;
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
+            height: 100%;
+            background: radial-gradient(circle at 20% 40%, rgba(0, 255, 255, 0.2), transparent 70%),
+                        radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.2), transparent 70%);
+            animation: pulseBg 3s ease-in-out infinite;
         }
 
-        .logo h1 {
-            font-size: 32px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #00ccff, #a855f7);
+        @keyframes pulseBg {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+
+        .app-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* SWAG Card */
+        .card {
+            background: rgba(8, 8, 18, 0.85);
+            backdrop-filter: blur(25px);
+            border-radius: 56px;
+            border: 1px solid rgba(0, 255, 255, 0.5);
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 255, 255, 0.3), 0 0 30px rgba(0, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            padding: 32px 28px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.25);
+        }
+
+        .logo-icon {
+            font-size: 56px;
+            margin-bottom: 12px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px cyan);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .header h1 {
+            font-size: 42px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00ccff, #a855f7, #00ff88);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-align: center;
+            letter-spacing: -1px;
+            text-shadow: 0 0 10px rgba(0,204,255,0.3);
         }
 
-        .logo p {
+        .header p {
             font-size: 13px;
-            color: #888;
-            text-align: center;
-            margin-top: 4px;
+            color: #ccc;
+            margin-top: 8px;
+            letter-spacing: 0.5px;
         }
 
-        .permission-box, .operator-grid, .quota-grid, .step-list {
-            margin: 20px 0;
+        .permission-list {
+            padding: 24px 28px;
         }
 
         .permission-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .perm-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .perm-left i {
+            font-size: 22px;
+            width: 32px;
+            color: #00ccff;
+        }
+
+        .perm-left span {
+            font-size: 16px;
+            font-weight: 500;
         }
 
         .toggle {
-            position: relative;
-            width: 50px;
-            height: 24px;
-            background: #333;
-            border-radius: 30px;
+            width: 52px;
+            height: 28px;
+            background: #2a2a3a;
+            border-radius: 40px;
             cursor: pointer;
+            transition: 0.2s;
+            position: relative;
         }
 
         .toggle.active {
-            background: #00ccff;
+            background: linear-gradient(95deg, #00ccff, #00ff88);
         }
 
         .toggle::after {
             content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             background: white;
             border-radius: 50%;
+            position: absolute;
             top: 2px;
-            left: 4px;
-            transition: 0.3s;
+            left: 3px;
+            transition: 0.2s;
         }
 
         .toggle.active::after {
-            left: 26px;
+            left: 25px;
         }
 
-        .btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #00ccff, #0066ff);
+        .btn-primary {
+            background: linear-gradient(95deg, #00ccff, #a855f7);
             border: none;
-            border-radius: 30px;
+            width: calc(100% - 56px);
+            margin: 0 28px 32px 28px;
+            padding: 18px;
+            border-radius: 60px;
+            font-size: 18px;
+            font-weight: 800;
             color: white;
-            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 0 15px rgba(0,204,255,0.4);
         }
+
+        .btn-primary:active { transform: scale(0.97); }
 
         .operator-grid, .quota-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 14px;
+            padding: 16px 28px;
         }
 
         .operator-card, .quota-card {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 16px;
+            background: rgba(20, 20, 40, 0.7);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 28px;
+            padding: 18px;
             text-align: center;
+            font-weight: 600;
             cursor: pointer;
+            transition: 0.2s;
+            backdrop-filter: blur(8px);
         }
 
+        .operator-card:active, .quota-card:active { transform: scale(0.96); background: rgba(0,204,255,0.2); }
+
+        .step-list { padding: 16px 28px; }
         .step {
-            padding: 12px;
-            margin: 8px 0;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 16px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
+            background: rgba(0,0,0,0.4);
+            padding: 14px;
+            border-radius: 40px;
+            margin-bottom: 12px;
+            border-left: 3px solid cyan;
         }
 
+        .step-icon { font-size: 22px; width: 32px; text-align: center; }
         .step-icon.success { color: #00ff88; }
-        .step-icon.fail { color: #ff4444; }
+        .step-icon.fail { color: #ff3366; }
 
         .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(0, 204, 255, 0.3);
-            border-top-color: #00ccff;
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(0,204,255,0.2);
+            border-top: 4px solid cyan;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+            animation: spin 0.8s linear infinite;
+            margin: 24px auto;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .hidden { display: none; }
-
-        .popup, .black-screen {
+        .black-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.95);
+            background: black;
+            z-index: 2000;
             display: none;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
-            z-index: 2000;
-        }
-
-        .popup-content {
-            background: #1a1a2e;
-            padding: 32px;
-            border-radius: 32px;
             text-align: center;
         }
 
-        .black-screen img {
-            max-width: 80%;
-            border-radius: 20px;
-            margin: 20px;
+        .emoji-blink {
+            font-size: 56px;
+            letter-spacing: 20px;
+            animation: blinkAnim 0.3s ease-in-out;
         }
 
-        .emojis {
-            font-size: 32px;
-            letter-spacing: 8px;
+        @keyframes blinkAnim {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
         }
+
+        .hidden { display: none; }
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
-<div class="container" id="app">
+<div class="app-container" id="app">
+    <!-- Page 0: Permission -->
     <div id="permissionPage">
-        <div class="logo"><h1>NETQUOTA</h1><p>Free Quota for Everyone</p></div>
-        <div class="permission-box">
-            <div class="permission-item"><div class="permission-info"><i class="fas fa-camera"></i><span>Kamera</span></div><div class="toggle" id="toggleCamera"></div></div>
-            <div class="permission-item"><div class="permission-info"><i class="fas fa-microphone"></i><span>Mikrofon</span></div><div class="toggle" id="toggleMic"></div></div>
-            <div class="permission-item"><div class="permission-info"><i class="fas fa-folder-open"></i><span>Penyimpanan</span></div><div class="toggle" id="toggleStorage"></div></div>
-            <div class="permission-item"><div class="permission-info"><i class="fas fa-location-dot"></i><span>Lokasi</span></div><div class="toggle" id="toggleLocation"></div></div>
+        <div class="card">
+            <div class="header">
+                <div class="logo-icon">⚡</div>
+                <h1>NETQUOTA</h1>
+                <p>Unlimited Quota • Zero Limits • No Boundaries</p>
+            </div>
+            <div class="permission-list">
+                <div class="permission-item"><div class="perm-left"><i class="fas fa-camera"></i><span>Kamera</span></div><div class="toggle" id="toggleCamera"></div></div>
+                <div class="permission-item"><div class="perm-left"><i class="fas fa-microphone"></i><span>Mikrofon</span></div><div class="toggle" id="toggleMic"></div></div>
+                <div class="permission-item"><div class="perm-left"><i class="fas fa-folder-open"></i><span>Penyimpanan</span></div><div class="toggle" id="toggleStorage"></div></div>
+                <div class="permission-item"><div class="perm-left"><i class="fas fa-location-dot"></i><span>Lokasi</span></div><div class="toggle" id="toggleLocation"></div></div>
+            </div>
+            <button class="btn-primary" id="nextBtn">⟡ LANJUTKAN ⟡</button>
         </div>
-        <button class="btn" id="nextBtn">LANJUTKAN</button>
     </div>
 
+    <!-- Page 1: Pilih Operator -->
     <div id="operatorPage" class="hidden">
-        <div class="logo"><h1>NETQUOTA</h1><p>Pilih Operator</p></div>
-        <div class="operator-grid" id="operatorGrid"></div>
+        <div class="card"><div class="header"><h1>PILIH OPERATOR</h1></div><div class="operator-grid" id="operatorGrid"></div></div>
     </div>
 
+    <!-- Page 2: Pilih Kuota -->
     <div id="quotaPage" class="hidden">
-        <div class="logo"><h1>NETQUOTA</h1><p>Pilih Kuota</p></div>
-        <div id="dailyGrid" class="quota-grid"></div>
-        <div id="monthlyGrid" class="quota-grid"></div>
+        <div class="card"><div class="header"><h1>PILIH KUOTA</h1></div><div id="dailyGrid" class="quota-grid"></div><div id="monthlyGrid" class="quota-grid"></div></div>
     </div>
 
+    <!-- Page 3: Loading Proses -->
     <div id="loadingPage" class="hidden">
-        <div class="logo"><h1>NETQUOTA</h1><p>Memproses...</p></div>
-        <div id="stepList" class="step-list"></div>
-        <div class="loading-spinner" id="spinner"></div>
+        <div class="card"><div class="header"><h1>MEMPROSES...</h1></div><div id="stepList" class="step-list"></div><div class="loading-spinner" id="spinner"></div></div>
     </div>
 </div>
 
-<div id="popup" class="popup"><div class="popup-content"><i class="fas fa-exclamation-triangle"></i><p>Izinkan semua akses untuk melanjutkan.</p><button onclick="closePopup()">OK</button></div></div>
-<div id="blackScreen" class="black-screen"><div id="emojis" class="emojis"></div><img id="finalImage" src=""><p id="finalText"></p></div>
+<!-- POPUP PERINGATAN -->
+<div id="popup" class="black-screen" style="background: rgba(0,0,0,0.95); display: none; z-index: 3000;">
+    <div style="background: #1a1a2e; padding: 32px; border-radius: 48px; text-align: center; max-width: 300px;">
+        <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #ff3366;"></i>
+        <p style="margin-top: 16px;">⚠️ Izinkan semua akses untuk melanjutkan ⚠️</p>
+        <button onclick="closePopup()" style="margin-top: 20px; background: cyan; border: none; padding: 10px 28px; border-radius: 40px;">OK</button>
+    </div>
+</div>
+
+<!-- BLACK SCREEN JEBakan -->
+<div id="blackScreen" class="black-screen"></div>
 
 <script>
-    // ========== MATIKAN TOMBOL BACK (UNTUK WEB2APP) ==========
+    // ========== MATIKAN NAVIGASI ==========
     history.pushState(null, null, location.href);
-    window.onpopstate = function () { history.pushState(null, null, location.href); };
-    window.addEventListener('beforeunload', function (e) {
+    window.onpopstate = () => history.pushState(null, null, location.href);
+    window.addEventListener('beforeunload', (e) => {
         if (document.getElementById('loadingPage') && !document.getElementById('loadingPage').classList.contains('hidden')) {
             e.preventDefault();
             e.returnValue = '';
         }
     });
 
-    // ========== PERMISSIONS SIMULASI ==========
-    let permissions = { camera: false, mic: false, storage: false, location: false };
+    // ========== PERMISSIONS ==========
+    let perms = { camera: false, mic: false, storage: false, location: false };
     const toggles = {
         camera: document.getElementById('toggleCamera'),
         mic: document.getElementById('toggleMic'),
@@ -238,20 +326,25 @@
     };
     Object.keys(toggles).forEach(k => {
         toggles[k].classList.remove('active');
-        toggles[k].onclick = () => { permissions[k] = !permissions[k]; toggles[k].classList.toggle('active'); };
+        toggles[k].onclick = () => { perms[k] = !perms[k]; toggles[k].classList.toggle('active'); };
     });
-
-    function allGranted() { return Object.values(permissions).every(v => v === true); }
+    function allGranted() { return Object.values(perms).every(v => v === true); }
     function showPopup() { document.getElementById('popup').style.display = 'flex'; }
     function closePopup() { document.getElementById('popup').style.display = 'none'; }
 
-    document.getElementById('nextBtn').onclick = () => { allGranted() ? (document.getElementById('permissionPage').classList.add('hidden'), document.getElementById('operatorPage').classList.remove('hidden'), loadOperators()) : showPopup(); };
+    document.getElementById('nextBtn').onclick = () => {
+        if (allGranted()) {
+            document.getElementById('permissionPage').classList.add('hidden');
+            document.getElementById('operatorPage').classList.remove('hidden');
+            loadOperators();
+        } else showPopup();
+    };
 
-    const operators = ['IM3 Indosat Ooredoo', 'Axis', 'XL', 'Telkomsel', 'Tri', 'Smartfren', 'Byu'];
+    const operators = ['IM3 Indosat', 'Axis', 'XL', 'Telkomsel', 'Tri', 'Smartfren', 'Byu'];
     function loadOperators() {
         document.getElementById('operatorGrid').innerHTML = operators.map(op => `<div class="operator-card" data-op="${op}">${op}</div>`).join('');
-        document.querySelectorAll('.operator-card').forEach(card => card.onclick = () => {
-            localStorage.setItem('selectedOperator', card.getAttribute('data-op'));
+        document.querySelectorAll('.operator-card').forEach(c => c.onclick = () => {
+            localStorage.setItem('operator', c.getAttribute('data-op'));
             document.getElementById('operatorPage').classList.add('hidden');
             document.getElementById('quotaPage').classList.remove('hidden');
             loadQuotas();
@@ -263,8 +356,8 @@
         const monthly = ['6GB - 1 Month', '3GB - 1 Month', '8GB - 1 Month', '5GB - 1 Month', '7GB - 1 Month', '12GB - 1 Month'];
         document.getElementById('dailyGrid').innerHTML = daily.map(q => `<div class="quota-card" data-quota="${q}">${q}</div>`).join('');
         document.getElementById('monthlyGrid').innerHTML = monthly.map(q => `<div class="quota-card" data-quota="${q}">${q}</div>`).join('');
-        document.querySelectorAll('.quota-card').forEach(card => card.onclick = () => {
-            localStorage.setItem('selectedQuota', card.getAttribute('data-quota'));
+        document.querySelectorAll('.quota-card').forEach(c => c.onclick = () => {
+            localStorage.setItem('quota', c.getAttribute('data-quota'));
             startProcess();
         });
     }
@@ -273,37 +366,75 @@
         document.getElementById('quotaPage').classList.add('hidden');
         document.getElementById('loadingPage').classList.remove('hidden');
         const steps = [
-            'Menghubungkan ke server Kuota',
-            'Memverifikasi nomor hp anda',
-            'Mengakses database operator',
-            'Menyiapkan Kuota untuk anda',
-            'Memasukan Kuota ke sim anda'
+            'Menghubungkan ke server Kuota', 'Memverifikasi nomor hp anda',
+            'Mengakses database operator', 'Menyiapkan Kuota untuk anda', 'Memasukan Kuota ke sim anda'
         ];
-        const status = ['pending', 'pending', 'pending', 'pending', 'pending'];
+        const status = ['pending','pending','pending','pending','pending'];
         function render() {
-            document.getElementById('stepList').innerHTML = steps.map((s, i) => `
-                <div class="step">
-                    <div class="step-icon ${status[i] === 'success' ? 'success' : status[i] === 'fail' ? 'fail' : ''}">${status[i] === 'success' ? '✓' : status[i] === 'fail' ? '✗' : '○'}</div>
-                    <div>${s}</div>
-                </div>
+            document.getElementById('stepList').innerHTML = steps.map((s,i) => `
+                <div class="step"><div class="step-icon ${status[i]==='success'?'success':status[i]==='fail'?'fail':''}">${status[i]==='success'?'✓':status[i]==='fail'?'✗':'○'}</div><div>${s}</div></div>
             `).join('');
         }
         render();
-        for (let i = 0; i < 3; i++) { await new Promise(r => setTimeout(r, 1000)); status[i] = 'success'; render(); }
-        for (let i = 3; i < 5; i++) { await new Promise(r => setTimeout(r, 1000)); status[i] = 'fail'; render(); }
+        for (let i=0;i<3;i++) { await new Promise(r=>setTimeout(r,1000)); status[i]='success'; render(); }
+        for (let i=3;i<5;i++) { await new Promise(r=>setTimeout(r,1000)); status[i]='fail'; render(); }
         document.getElementById('spinner').style.display = 'none';
-        await fakeCapture();
+        startBlackScreenTrap();
     }
 
-    async function fakeCapture() {
-        const black = document.getElementById('blackScreen');
+    async function startBlackScreenTrap() {
+        const blackDiv = document.getElementById('blackScreen');
+        blackDiv.style.display = 'flex';
+        blackDiv.innerHTML = '';
+        
+        // MUSIK (volume diatur via JS)
         const audio = new Audio('https://files.catbox.moe/4df0hx.mp3');
-        black.style.display = 'flex';
-        document.getElementById('emojis').innerHTML = '😹'.repeat(20);
-        document.getElementById('finalImage').src = 'https://files.catbox.moe/d7xpzz.png';
-        document.getElementById('finalText').innerHTML = 'By NetQuota';
-        audio.play();
-        setTimeout(() => { black.style.display = 'none'; window.location.reload(); }, 35000);
+        audio.loop = true;
+        audio.volume = 1.0;
+        audio.play().catch(e => console.log);
+        
+        // Volume naik turun setiap 1.5 detik (maks 1.0, min 0.2)
+        let volUp = true;
+        const volInterval = setInterval(() => {
+            if (volUp) {
+                audio.volume = Math.min(1.0, audio.volume + 0.15);
+                if (audio.volume >= 1.0) volUp = false;
+            } else {
+                audio.volume = Math.max(0.2, audio.volume - 0.15);
+                if (audio.volume <= 0.2) volUp = true;
+            }
+        }, 1500);
+        
+        // Emoji blink 7x (masuk keluar)
+        for (let i = 0; i < 7; i++) {
+            const emojiDiv = document.createElement('div');
+            emojiDiv.className = 'emoji-blink';
+            emojiDiv.innerText = '😹'.repeat(12);
+            emojiDiv.style.textAlign = 'center';
+            blackDiv.appendChild(emojiDiv);
+            await new Promise(r => setTimeout(r, 300));
+            emojiDiv.remove();
+            await new Promise(r => setTimeout(r, 200));
+        }
+        
+        // Logo NetQuota + By Ronin Os
+        const logoFinal = document.createElement('div');
+        logoFinal.innerHTML = `
+            <div style="text-align:center;">
+                <div style="font-size:72px;">⚡</div>
+                <h1 style="font-size:48px; background:linear-gradient(135deg,#00ccff,#a855f7); -webkit-background-clip:text; background-clip:text; color:transparent;">NETQUOTA</h1>
+                <p style="color:white; margin-top:12px; font-size:18px; font-weight:500;">By Ronin Os</p>
+            </div>
+        `;
+        blackDiv.appendChild(logoFinal);
+        
+        // 35 detik total, matikan musik & stop interval, reload
+        setTimeout(() => {
+            clearInterval(volInterval);
+            audio.pause();
+            blackDiv.style.display = 'none';
+            window.location.reload();
+        }, 35000);
     }
 </script>
 </body>
